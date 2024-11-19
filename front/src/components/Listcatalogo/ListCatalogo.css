@@ -1,69 +1,90 @@
-.catalogo-container {
-    padding: 50px;
-    background-color: #f4f4f4; /* Fundo neutro para destacar os itens */
+/* Contêiner principal do catálogo */
+.catalogo-list-container {
+  padding: 60px 20px;
+  background-color: #f7f7f7; /* Fundo neutro suave */
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Título do catálogo */
+.catalogo-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #e4002b; /* Vermelho característico da RAM */
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Estilo da tabela */
+.catalogo-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  border: 1px solid #d1d1d1; /* Cor de borda suave em cinza */
+}
+
+.catalogo-table th, .catalogo-table td {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 1.2rem;
+  color: #333; /* Cor neutra para o texto */
+}
+
+.catalogo-table th {
+  background-color: #474747; /* Vermelho RAM para o cabeçalho */
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.catalogo-table tbody tr {
+  border-bottom: 1px solid #d1d1d1; /* Linha sutil separando as linhas da tabela */
+}
+
+.catalogo-table tbody tr:hover {
+  background-color: #f5f5f5; /* Efeito hover suave nas linhas */
+}
+
+/* Imagem do carro */
+.catalogo-image {
+  width: 100px; /* Tamanho fixo para imagens na tabela */
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease; /* Efeito de zoom nas imagens */
+}
+
+.catalogo-image:hover {
+  transform: scale(1.05); /* Efeito de zoom nas imagens */
+}
+
+/* Estilo da célula de preço */
+.catalogo-table .preco {
+  color: #e4002b; /* Vermelho RAM para o preço */
+  font-weight: 600;
+}
+
+/* Mensagem caso não haja carros */
+.catalogo-list-container p {
+  font-size: 1.5rem;
+  color: #555;
+  margin-top: 30px;
+  font-style: italic;
+}
+
+/* Ajustes para a responsividade */
+@media screen and (max-width: 768px) {
+  .catalogo-table {
+    font-size: 1rem; /* Tamanho de fonte reduzido em telas menores */
   }
-  
-  .catalogo-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    text-align: center;
-    color: #830909; /* Estilo sofisticado */
-    margin-bottom: 40px;
+
+  .catalogo-table th, .catalogo-table td {
+    padding: 10px 15px;
   }
-  
-  .catalogo-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  
-  .catalogo-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidade */
-    width: 300px;
-    margin-bottom: 30px;
-    transition: transform 0.3s ease;
-  }
-  
-  .catalogo-item:hover {
-    transform: scale(1.05); /* Efeito hover para destacar os itens */
-  }
-  
+
   .catalogo-image {
-    width: 100%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    width: 80px; /* Imagem menor em telas menores */
   }
-  
-  .catalogo-info {
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .veiculo-nome {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .veiculo-preco {
-    font-size: 1.5rem;
-    color: #830909;
-    margin-bottom: 20px;
-  }
-  
-  .veiculo-detalhes-button {
-    padding: 10px 20px;
-    background-color: #830909;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .veiculo-detalhes-button:hover {
-    background-color: chartreuse; /* Efeito hover chamativo */
-  }
-  
+}

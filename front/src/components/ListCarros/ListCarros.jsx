@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './ListCarros.css';
 
-const url = 'http://localhost:3000/carros';
+const url = 'http://localhost:3000/cars';
 
 const ListCarros = () => {
-    const [carros, setCarros] = useState([]);
+    const [cars, setCars] = useState([]); // Garantir que cars seja um array
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCarros, setSelectedCarros] = useState(null);
-    const [formData, setFormData] = useState({ nome: '', marca: '', ano: '' ,price: '', cor: '', image: '' });
+    const [formData, setFormData] = useState({ modelo: '', ano: '', preco: '', cor: '', image: '' });
 
     useEffect(() => {
-        const fetchCarros = async () => {
+        const fetchCars = async () => {
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Falha ao tentar ler os carros');
                 }
                 const data = await response.json();
-                setCarros(data.carros);
+                console.log(data); // Verificando a estrutura dos dados
+                setCars(Array.isArray(data.cars) ? data.cars : []); // Verificando se 'data.cars' é um array
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
@@ -26,7 +27,7 @@ const ListCarros = () => {
             }
         };
 
-        fetchCarros();
+        fetchCars();
     }, []);
 
     const deleteCarro = async (id) => {
@@ -37,15 +38,15 @@ const ListCarros = () => {
             if (!response.ok) {
                 throw new Error('Falha ao excluir o Carro');
             }
-            setCarros(carros.filter((carros) => carros.id !== id));
+            setCars(cars.filter((car) => car.id !== id));
         } catch (err) {
             setError(err.message);
         }
     };
 
-    const handleEditClick = (carros) => {
-        setSelectedCarros(carros);
-        setFormData({ ...carros });
+    const handleEditClick = (car) => {
+        setSelectedCarros(car);
+        setFormData({ ...car });
     };
 
     const handleInputChange = (e) => {
@@ -68,7 +69,7 @@ const ListCarros = () => {
             if (!response.ok) {
                 throw new Error('Falha ao atualizar o carro');
             }
-            setCarros(carros.map((carros) => (carros.id === selectedCarros.id ? formData : carros)));
+            setCars(cars.map((car) => (car.id === selectedCarros.id ? formData : car)));
             setSelectedCarros(null);
         } catch (err) {
             setError(err.message);
@@ -81,44 +82,43 @@ const ListCarros = () => {
     return (
         <div className="pet-list-container">
             <h2>Lista de Carros</h2>
-            {carros.length === 0 ? (
-                <p>Nenhum carro encontrado :(</p>
+            {Array.isArray(cars) && cars.length === 0 ? (
+                <p>Nenhum carro encontrado</p>
             ) : (
                 <table className="pet-table">
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>marca</th>
-                            <th>ano</th>
+                            <th>Marca</th>
+                            <th>Ano</th>
                             <th>Preço</th>
                             <th>Cor</th>
                             <th>Imagem</th>
-                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {carros.map((carros) => (
-                            <tr key={carros.id}>
-                                <td>{carros.nome}</td>
-                                <td>{carros.marca}</td>
-                                <td>{carros.ano}</td>
-                                <td>R${carros.price}</td>
-                                <td>{carros.cor}</td>
-                                <td>
-                                    {carros.image && (
-                                        <img
-                                            src={`http://localhost:3000/${carros.image}`}
-                                            alt={`Imagem de ${carros.nome}`}
-                                            className="pet-image"
-                                        />
-                                    )}
-                                </td>
-                                <td className="button-group">
-                                    <button className="edit-button" onClick={() => handleEditClick(carros)}>Editar</button>
-                                    <button className="delete-button" onClick={() => deleteCarro(carros.id)}>Excluir</button>
-                                </td>
-                            </tr>
-                        ))}
+                        {Array.isArray(cars) &&
+                            cars.map((car) => (
+                                <tr key={car.id}>
+                                    <td>{car.modelo}</td>
+                                    <td>{car.ano}</td>
+                                    <td>R${car.preco}</td>
+                                    <td>{car.cor}</td>
+                                    <td>
+                                        {car.image && (
+                                            <img
+                                                src={`http://localhost:3000/${car.image}`}
+                                                alt={`Imagem de ${car.modelo}`}
+                                                className="pet-image"
+                                            />
+                                        )}
+                                    </td>
+                                    <td className="button-group">
+                                        <button className="edit-button" onClick={() => handleEditClick(car)}>Editar</button>
+                                        <button className="delete-button" onClick={() => deleteCarro(car.id)}>Excluir</button>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             )}
@@ -128,29 +128,22 @@ const ListCarros = () => {
                     <h3>Editar carro</h3>
                     <input
                         type="text"
-                        name="nome"
-                        value={formData.nome}
+                        name="modelo"
+                        value={formData.modelo}
                         onChange={handleInputChange}
-                        placeholder="Nome"
-                    />
-                    <input
-                        type="text"
-                        name="marca"
-                        value={formData.nome}
-                        onChange={handleInputChange}
-                        placeholder="Marca"
+                        placeholder="Modelo"
                     />
                     <input
                         type="date"
                         name="ano"
-                        value={formData.nasc}
+                        value={formData.ano}
                         onChange={handleInputChange}
                         placeholder="Ano"
                     />
                     <input
                         type="number"
-                        name="price"
-                        value={formData.peso}
+                        name="preco"
+                        value={formData.preco}
                         onChange={handleInputChange}
                         placeholder="Preço"
                     />

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./data/lojacarros.db');
+const db = new sqlite3.Database('./data/petshop.db');
 
 const createInitialUser = async () => {
     const username = 'admin';

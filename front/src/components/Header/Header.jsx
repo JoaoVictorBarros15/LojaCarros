@@ -19,7 +19,7 @@ function Header({ onLogout }) {
             <nav>
                 <ul className="nav-list">
                     <li><Link to="/">Home</Link></li>
-                    <li><Link to="/form-carros">Venda seu Carro</Link></li>
+                    <li><Link to="/form-car">Venda seu Carro</Link></li>
                     <li><Link to="/list-carros">Consulta Carros</Link></li>
                     <li><Link to="/form-users">Cadastro de Usuários</Link></li>
                     <li><Link to="/list-catalogo">Veiculos Disponiveis</Link></li>

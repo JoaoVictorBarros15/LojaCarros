@@ -1,7 +1,7 @@
 // Import necessary modules
 const express = require('express');
 const cors = require('cors');
-const db = require('./db-lojacarros');
+const db = require('./db-loja');
 const multer = require('multer');
 const path = require('path');
 const bcrypt = require('bcrypt');
@@ -50,70 +50,82 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes and Endpoints
-// Pet-related endpoints (no authentication needed for these)
-app.get('/carros', (req, res) => {
+// Car-related endpoints (no authentication needed for these)
+app.get('/cars', (req, res) => {
     db.all('SELECT * FROM Carros', [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ carros: rows });
+        res.json({ cars: rows });
     });
 });
 
-app.post('/carros', upload.single('image'), (req, res) => {
-    const { nome, marca, ano, price, cor } = req.body;
-    const imagePath = req.file && req.file.path;
-    if (!nome || !marca || !ano || !price || !cor || !imagePath) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-  
-    db.run(`
-      INSERT INTO Carros (nome, marca, ano, price, cor, image)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `, [nome, marca, ano, price, cor, imagePath], function (err) {
-      if (err) return res.status(400).json({ error: err.message });
-      res.json({
-        id: this.lastID,
-        nome,
-        marca,
-        ano,
-        price,
-        cor,
-        image: imagePath
-      });
-    });
-  });
-
-
-// Endpoint para atualizar um pet existente
-app.put('/carros/:id', (req, res) => {
-    const { id } = req.params; // Extract ID from URL parameters
-    const { nome, marca, ano, price, cor } = req.body; // Extract body data
-
-    // Validate input
-    if (!nome || !marca || !ano || !price || !cor) {
-        res.status(400).json({ message: 'All fields (nome, marca, ano, price, cor) are required' });
-        return;
+app.post('/cars', upload.single('image'), (req, res) => {
+    const { modelo, ano, cor, preco } = req.body;
+    const imagePath = req.file ? req.file.path : null;
+    if (!modelo || !ano || !cor || !preco || !imagePath) {
+        return res.status(400).json({ message: 'All fields are required' });
     }
 
     db.run(
-        'UPDATE Carros SET nome = ?, marca = ?, ano = ?, price = ?, cor = ? WHERE id = ?',
-        [nome, marca, ano, price, cor, id],
+        'INSERT INTO Carros (modelo, ano, cor, preco, image) VALUES (?, ?, ?, ?, ?)',
+        [modelo, ano, cor, preco, imagePath],
         function (err) {
-            if (err) {
-                console.error(`Error updating carro with ID ${id}:`, err);
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            if (this.changes === 0) {
-                res.status(404).json({ message: 'carro not found' });
-                return;
-            }
-            res.json({ message: `carro updated with ID ${id}` });
+            if (err) return res.status(400).json({ error: err.message });
+            res.json({
+                id: this.lastID,
+                modelo,
+                ano,
+                cor,
+                preco,
+                image: imagePath
+            });
         }
     );
 });
 
+// Endpoint para atualizar um carro existente
+app.put('/cars/:id', (req, res) => {
+    const { id } = req.params; // Extract ID from URL parameters
+    const { modelo, ano, cor, preco } = req.body; // Extract body data
 
+    // Validate input
+    if (!modelo || !ano || !cor || !preco) {
+        res.status(400).json({ message: 'All fields (modelo, ano, cor, preco) are required' });
+        return;
+    }
 
+    db.run(
+        'UPDATE Carros SET modelo = ?, ano = ?, cor = ?, preco = ? WHERE id = ?',
+        [modelo, ano, cor, preco, id],
+        function (err) {
+            if (err) {
+                console.error(`Error updating car with ID ${id}:`, err);
+                res.status(400).json({ error: err.message });
+                return;
+            }
+            if (this.changes === 0) {
+                res.status(404).json({ message: 'Car not found' });
+                return;
+            }
+            res.json({ message: `Car updated with ID ${id}` });
+        }
+    );
+   // Endpoint para excluir um carro existente
+app.delete('/cars/:id', (req, res) => {
+    const { id } = req.params; // Pega o ID do carro
+
+    // Lógica para deletar o carro com o id fornecido
+    db.run('DELETE FROM Carros WHERE id = ?', [id], function (err) {
+        if (err) {
+            console.error(`Erro ao excluir o carro com ID ${id}:`, err);
+            return res.status(500).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Carro não encontrado' });
+        }
+        res.status(200).send({ message: 'Carro excluído com sucesso' });
+    });
+});
+});
 
 // User endpoints with authentication
 app.get('/users', authenticateToken, (req, res) => {
@@ -143,7 +155,6 @@ app.post('/users', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 // Endpoint to update user
 app.put('/users/:id', authenticateToken, async (req, res) => {
@@ -181,9 +192,6 @@ app.put('/users/:id', authenticateToken, async (req, res) => {
         res.json({ message: 'User updated successfully' });
     });
 });
-
-
-
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
