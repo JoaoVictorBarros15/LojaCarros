@@ -57,6 +57,7 @@ const Login = ({ onLogin }) => {
                     />
                 </div>
                 <button type="submit">Log In</button>
+                <button onClick={() => navigate('/form-users')}>Register</button>
 
                
             </form>
