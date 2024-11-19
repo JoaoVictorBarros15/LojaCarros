@@ -1,0 +1,69 @@
+.catalogo-container {
+    padding: 50px;
+    background-color: #f4f4f4; /* Fundo neutro para destacar os itens */
+  }
+  
+  .catalogo-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #830909; /* Estilo sofisticado */
+    margin-bottom: 40px;
+  }
+  
+  .catalogo-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .catalogo-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para profundidade */
+    width: 300px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+  }
+  
+  .catalogo-item:hover {
+    transform: scale(1.05); /* Efeito hover para destacar os itens */
+  }
+  
+  .catalogo-image {
+    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .catalogo-info {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .veiculo-nome {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .veiculo-preco {
+    font-size: 1.5rem;
+    color: #830909;
+    margin-bottom: 20px;
+  }
+  
+  .veiculo-detalhes-button {
+    padding: 10px 20px;
+    background-color: #830909;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .veiculo-detalhes-button:hover {
+    background-color: chartreuse; /* Efeito hover chamativo */
+  }
+  

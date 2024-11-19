@@ -1,0 +1,102 @@
+.pet-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.pet-table th, .pet-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.pet-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.pet-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.pet-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+button {
+    color: white;
+    border: none;
+    padding: 6px 10px;
+	margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    max-width: 80px;
+}
+
+.edit-button {
+    background-color: #007bff;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+}
+
+.save-button {
+    background-color: #28a745;
+}
+
+.cancel-button {
+    background-color: #6c757d;
+}
+
+
+input {
+    height: 40px;
+    padding: 8px;
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    font-size: 1rem; 
+    box-sizing: border-box; 
+	margin-right: 10px;
+}
+
+
+/* Para ajustar a largura das colunas ;) */
+
+.pet-table th:nth-child(1), .pet-table td:nth-child(1) {
+    width: 30%;
+}
+
+.pet-table th:nth-child(2), .pet-table td:nth-child(2) {
+    width: 10%;
+}
+
+.pet-table th:nth-child(3), .pet-table td:nth-child(3) {
+    width: 10%;
+}
+
+.pet-table th:nth-child(4), .pet-table td:nth-child(4) {
+    width: 10%;
+}
+
+.pet-table th:nth-child(5), .pet-table td:nth-child(5) {
+    width: 10%;
+}
+
+.pet-table th:nth-child(6), .pet-table td:nth-child(6) {
+    width: 15%;
+    text-align: center;
+}
+
+.pet-image {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    object-fit: cover;
+}
+

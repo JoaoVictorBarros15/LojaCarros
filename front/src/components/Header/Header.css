@@ -1,0 +1,56 @@
+/* Header.css */
+.header {
+  background-color: #1f1f1f; /* Cor escura, sofisticada */
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo a {
+  font-size: 2rem; 
+  font-weight: bold;
+  color: #e0e0e0; /* Cor metálica */
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  text-decoration: none;
+  align-self: center; /* Certifique-se que a logo esteja alinhada */
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem; 
+  align-items: center; /* Alinha verticalmente os itens da lista */
+}
+
+.nav-list li a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 1rem 0.75rem; /* Ajuste de padding para alinhamento vertical */
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-list li a:hover {
+  color: #c2a35d; /* Dourado de luxo */
+  background-color: #333;
+  border-radius: 5px;
+}
+
+.auth-btn {
+  background-color: #c2a35d; 
+  color: #1f1f1f; 
+  border: none;
+  padding: 1rem; 
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600; 
+  font-size: 1rem;
+}
+.auth-btn:hover {
+  background-color: #e0e0e0;
+  color: #1f1f1f;
+}
