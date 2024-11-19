@@ -10,7 +10,7 @@ const FormCarro = () => {
         ano: '',
         price: '',
         cor: '',
-        image: '' 
+        image: null // Alterado para null para verificar se uma imagem foi selecionada
     });
 
     const handleChange = (e) => {
@@ -21,56 +21,47 @@ const FormCarro = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setFormData((prevData) => ({ ...prevData, image: file }));
-      };
-      
+    };
 
     const clearForm = () => {
-        setFormData({ nome: '', marca: '', ano: '', price: '', cor: '', image: '' });
+        setFormData({ nome: '', marca: '', ano: '', price: '', cor: '', image: null });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-      
-        const formData = new FormData();
-        formData.append('nome', formData.nome);
-        formData.append('marca', formData.marca);
-        formData.append('ano', formData.ano);
-        formData.append('price', formData.price);
-        formData.append('cor', formData.cor);
-        if (formData.image) {
-          formData.append('image', formData.image);
+
+        // Verifique se todos os campos obrigatórios estão preenchidos
+        if (!formData.nome || !formData.marca || !formData.ano || !formData.price || !formData.cor || !formData.image) {
+            alert('Por favor, preencha todos os campos, incluindo a imagem.');
+            return;
         }
       
+        const fd = new FormData();
+        fd.append('nome', formData.nome);
+        fd.append('marca', formData.marca);
+        fd.append('ano', formData.ano);
+        fd.append('price', formData.price);
+        fd.append('cor', formData.cor);
+        fd.append('image', formData.image); // Verifique se o arquivo está sendo enviado corretamente
+
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-      
-          if (!response.ok) {
-            throw new Error(`Erro ao adicionar carro: ${response.status}`);
-          }
-      
-          const data = await response.json();
-      
-          alert(`Carro adicionado com sucesso! ID: ${data.id}`);
-      
-          clearForm();
+            const response = await fetch(url, {
+                method: 'POST',
+                body: fd,
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ao adicionar carro: ${response.status}`);
+            }
+
+            const data = await response.json();
+            alert(`Carro adicionado com sucesso! ID: ${data.id}`);
+            clearForm();  // Reset form after successful submission
         } catch (error) {
-          console.error('Error:', error);
-      
-          // Verificando se o erro é um objeto com uma propriedade message
-          if (error instanceof Error) {
+            console.error('Error:', error);
             alert(`Erro ao adicionar carro: ${error.message}`);
-          } else {
-            // Caso o erro seja um objeto não instanciado da classe Error, exibe uma mensagem genérica
-            alert('Erro desconhecido ao adicionar carro');
-          }
         }
-      };
+    };
 
     return (
         <div className="form-container">
@@ -132,7 +123,8 @@ const FormCarro = () => {
                         type="file"
                         name="image"
                         accept="image/*"
-                        onChange={handleImageChange} 
+                        onChange={handleImageChange}
+                        required
                     />
                 </div>
                 <button type="submit">Adicionar Carro</button>

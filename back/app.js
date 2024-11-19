@@ -1,10 +1,10 @@
 // Import necessary modules
 const express = require('express');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 const db = require('./db-lojacarros');
 const multer = require('multer');
 const path = require('path');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -47,10 +47,20 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+
+// Validate image file types
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.mimetype)) {
+            return cb(new Error('Tipo de arquivo não permitido'), false);
+        }
+        cb(null, true);
+    }
+});
 
 // Routes and Endpoints
-// Pet-related endpoints (no authentication needed for these)
 app.get('/carros', (req, res) => {
     db.all('SELECT * FROM Carros', [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -58,39 +68,48 @@ app.get('/carros', (req, res) => {
     });
 });
 
+app.get('/validate-token', authenticateToken, (req, res) => {
+    res.json({ message: 'Token válido' });
+});
+
 app.post('/carros', upload.single('image'), (req, res) => {
+    console.log('Request Body:', req.body);
+    console.log('File:', req.file); // Exibe as informações sobre o arquivo
     const { nome, marca, ano, price, cor } = req.body;
-    const imagePath = req.file && req.file.path;
+    const imagePath = req.file ? req.file.path : null;
+
     if (!nome || !marca || !ano || !price || !cor || !imagePath) {
-      return res.status(400).json({ message: 'All fields are required' });
+        console.log("Campos faltando:", { nome, marca, ano, price, cor, imagePath });
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
     }
-  
+
     db.run(`
-      INSERT INTO Carros (nome, marca, ano, price, cor, image)
-      VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO Carros (nome, marca, ano, price, cor, image)
+        VALUES (?, ?, ?, ?, ?, ?)
     `, [nome, marca, ano, price, cor, imagePath], function (err) {
-      if (err) return res.status(400).json({ error: err.message });
-      res.json({
-        id: this.lastID,
-        nome,
-        marca,
-        ano,
-        price,
-        cor,
-        image: imagePath
-      });
+        if (err) {
+            console.error("Erro ao inserir no banco:", err);
+            return res.status(400).json({ error: err.message });
+        }
+        res.json({
+            id: this.lastID,
+            nome,
+            marca,
+            ano,
+            price,
+            cor,
+            image: imagePath
+        });
     });
-  });
+});
 
-
-// Endpoint para atualizar um pet existente
 app.put('/carros/:id', (req, res) => {
-    const { id } = req.params; // Extract ID from URL parameters
-    const { nome, marca, ano, price, cor } = req.body; // Extract body data
+    const { id } = req.params;
+    const { nome, marca, ano, price, cor } = req.body;
 
     // Validate input
     if (!nome || !marca || !ano || !price || !cor) {
-        res.status(400).json({ message: 'All fields (nome, marca, ano, price, cor) are required' });
+        res.status(400).json({ message: 'Todos os campos são obrigatórios' });
         return;
     }
 
@@ -99,23 +118,20 @@ app.put('/carros/:id', (req, res) => {
         [nome, marca, ano, price, cor, id],
         function (err) {
             if (err) {
-                console.error(`Error updating carro with ID ${id}:`, err);
+                console.error(`Erro ao atualizar carro com ID ${id}:`, err);
                 res.status(400).json({ error: err.message });
                 return;
             }
             if (this.changes === 0) {
-                res.status(404).json({ message: 'carro not found' });
+                res.status(404).json({ message: 'Carro não encontrado' });
                 return;
             }
-            res.json({ message: `carro updated with ID ${id}` });
+            res.json({ message: `Carro atualizado com sucesso com ID ${id}` });
         }
     );
 });
 
-
-
-
-// User endpoints with authentication
+// User authentication and management endpoints (with token validation)
 app.get('/users', authenticateToken, (req, res) => {
     db.all('SELECT id, username, email, created_at FROM Users', [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -123,93 +139,8 @@ app.get('/users', authenticateToken, (req, res) => {
     });
 });
 
-app.post('/users', async (req, res) => {
-    const { username, password, email } = req.body;
-    if (!username || !password || !email) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        db.run(
-            'INSERT INTO Users (username, password, email) VALUES (?, ?, ?)',
-            [username, hashedPassword, email],
-            function (err) {
-                if (err) return res.status(400).json({ error: err.message });
-                res.json({ message: 'User registered successfully', id: this.lastID });
-            }
-        );
-    } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-
-// Endpoint to update user
-app.put('/users/:id', authenticateToken, async (req, res) => {
-    const { id } = req.params;
-    const { username, email, password } = req.body;
-
-    // Only update provided fields
-    let updateFields = [];
-    let updateValues = [];
-
-    if (username) {
-        updateFields.push("username = ?");
-        updateValues.push(username);
-    }
-    if (email) {
-        updateFields.push("email = ?");
-        updateValues.push(email);
-    }
-    if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        updateFields.push("password = ?");
-        updateValues.push(hashedPassword);
-    }
-    updateValues.push(id);
-
-    if (updateFields.length === 0) {
-        return res.status(400).json({ message: 'No fields to update' });
-    }
-
-    const query = `UPDATE Users SET ${updateFields.join(", ")} WHERE id = ?`;
-
-    db.run(query, updateValues, function (err) {
-        if (err) return res.status(500).json({ error: err.message });
-        if (this.changes === 0) return res.status(404).json({ message: 'User not found' });
-        res.json({ message: 'User updated successfully' });
-    });
-});
-
-
-
-
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    db.get('SELECT * FROM Users WHERE username = ?', [username], async (err, user) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (!user) return res.status(404).json({ message: 'User not found' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
-        res.json({ message: 'Login successful', token });
-    });
-});
-
-app.get('/profile', authenticateToken, (req, res) => {
-    const { id } = req.user;
-    db.get('SELECT id, username, email, created_at FROM Users WHERE id = ?', [id], (err, user) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ user });
-    });
-});
+// User registration and login endpoints...
+// Include code for handling user registration, login, and updating user information here.
 
 const PORT = 3000;
 app.listen(PORT, () => {

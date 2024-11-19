@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './FormUsers.css';
 
 const FormUsers = () => {
@@ -8,6 +9,7 @@ const FormUsers = () => {
         email: ''
     });
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -77,6 +79,8 @@ const FormUsers = () => {
                     />
                 </div>
                 <button type="submit">Salvar</button>
+                <h3> Ja tem uma conta ? </h3>
+                <button onClick={() => navigate('/login')}>Login</button>
             </form>
 			</div>
 			</div>
