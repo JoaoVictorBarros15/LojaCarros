@@ -2,20 +2,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-<<<<<<< HEAD
 import FormCar from './components/FormCar/FormCar';
-=======
-import Home from './components/Home/Home';
-import Login from './components/Login/Login';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import FormCarro from './components/FormCarros/FormCarros';
->>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
 import FormUsers from './components/FormUsers/FormUsers';
 import ListCarros from './components/ListCarros/ListCarros';
 import ListCatalogo from './components/Listcatalogo/ListCatalogo';
+import Home from './components/Home/Home'; // Ajuste o caminho conforme necessário
+import Login from './components/Login/Login'; // Ajuste o caminho conforme necessário
+import PrivateRoute from './components/PrivateRoute/PrivateRoute'; // Ajuste o caminho conforme necessário
 
 function App() {
-<<<<<<< HEAD
   const [veiculos, setVeiculos] = useState([
     {
       nome: 'RAM 1500 Limited',
@@ -120,94 +115,6 @@ function App() {
         </main>
         <Footer />
       </div>
-=======
-  const [veiculos, setVeiculos] = useState([]);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-
-  const handleLogin = () => {
-    setToken(localStorage.getItem('token'));
-  };
-
-  const handleLogout = () => {
-    setToken(null);
-    localStorage.removeItem('token');
-  };
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <Header onLogout={handleLogout} />
-              <main>
-                <Home />
-              </main>
-              <Footer />
-            </div>
-          }
-        />
-        <Route
-          path="/form-users"
-          element={
-            <div>
-              <FormUsers />
-            </div>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <div>
-              <Login onLogin={handleLogin} />
-            </div>
-          }
-        />
-        <Route
-          path="/form-carros"
-          element={
-            <PrivateRoute>
-              <div>
-                <Header onLogout={handleLogout} />
-                <main>
-                  <FormCarro />
-                </main>
-                <Footer />
-              </div>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/list-carros"
-          element={
-            <PrivateRoute>
-              <div>
-                <Header onLogout={handleLogout} />
-                <main>
-                  <ListCarros />
-                </main>
-                <Footer />
-              </div>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/list-catalogo"
-          element={
-            <PrivateRoute>
-              <div>
-                <Header onLogout={handleLogout} />
-                <main>
-                  <ListCatalogo veiculos={veiculos} />
-                </main>
-                <Footer />
-              </div>
-            </PrivateRoute>
-          }
-        />
-      </Routes>
->>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
     </BrowserRouter>
   );
 }
