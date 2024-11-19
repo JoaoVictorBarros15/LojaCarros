@@ -1,10 +1,10 @@
 // Import necessary modules
 const express = require('express');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 const db = require('./db-loja');
 const multer = require('multer');
 const path = require('path');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -47,28 +47,90 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
-const upload = multer({ storage });
+
+// Validate image file types
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.mimetype)) {
+            return cb(new Error('Tipo de arquivo não permitido'), false);
+        }
+        cb(null, true);
+    }
+});
 
 // Routes and Endpoints
+<<<<<<< HEAD
 // Car-related endpoints (no authentication needed for these)
 app.get('/cars', (req, res) => {
+=======
+app.get('/carros', (req, res) => {
+>>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
     db.all('SELECT * FROM Carros', [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ cars: rows });
     });
 });
 
+<<<<<<< HEAD
 app.post('/cars', upload.single('image'), (req, res) => {
     const { modelo, ano, cor, preco } = req.body;
     const imagePath = req.file ? req.file.path : null;
     if (!modelo || !ano || !cor || !preco || !imagePath) {
         return res.status(400).json({ message: 'All fields are required' });
+=======
+app.get('/validate-token', authenticateToken, (req, res) => {
+    res.json({ message: 'Token válido' });
+});
+
+app.post('/carros', upload.single('image'), (req, res) => {
+    console.log('Request Body:', req.body);
+    console.log('File:', req.file); // Exibe as informações sobre o arquivo
+    const { nome, marca, ano, price, cor } = req.body;
+    const imagePath = req.file ? req.file.path : null;
+
+    if (!nome || !marca || !ano || !price || !cor || !imagePath) {
+        console.log("Campos faltando:", { nome, marca, ano, price, cor, imagePath });
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
+    }
+
+    db.run(`
+        INSERT INTO Carros (nome, marca, ano, price, cor, image)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `, [nome, marca, ano, price, cor, imagePath], function (err) {
+        if (err) {
+            console.error("Erro ao inserir no banco:", err);
+            return res.status(400).json({ error: err.message });
+        }
+        res.json({
+            id: this.lastID,
+            nome,
+            marca,
+            ano,
+            price,
+            cor,
+            image: imagePath
+        });
+    });
+});
+
+app.put('/carros/:id', (req, res) => {
+    const { id } = req.params;
+    const { nome, marca, ano, price, cor } = req.body;
+
+    // Validate input
+    if (!nome || !marca || !ano || !price || !cor) {
+        res.status(400).json({ message: 'Todos os campos são obrigatórios' });
+        return;
+>>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
     }
 
     db.run(
         'INSERT INTO Carros (modelo, ano, cor, preco, image) VALUES (?, ?, ?, ?, ?)',
         [modelo, ano, cor, preco, imagePath],
         function (err) {
+<<<<<<< HEAD
             if (err) return res.status(400).json({ error: err.message });
             res.json({
                 id: this.lastID,
@@ -78,10 +140,23 @@ app.post('/cars', upload.single('image'), (req, res) => {
                 preco,
                 image: imagePath
             });
+=======
+            if (err) {
+                console.error(`Erro ao atualizar carro com ID ${id}:`, err);
+                res.status(400).json({ error: err.message });
+                return;
+            }
+            if (this.changes === 0) {
+                res.status(404).json({ message: 'Carro não encontrado' });
+                return;
+            }
+            res.json({ message: `Carro atualizado com sucesso com ID ${id}` });
+>>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
         }
     );
 });
 
+<<<<<<< HEAD
 // Endpoint para atualizar um carro existente
 app.put('/cars/:id', (req, res) => {
     const { id } = req.params; // Extract ID from URL parameters
@@ -128,6 +203,9 @@ app.delete('/cars/:id', (req, res) => {
 });
 
 // User endpoints with authentication
+=======
+// User authentication and management endpoints (with token validation)
+>>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
 app.get('/users', authenticateToken, (req, res) => {
     db.all('SELECT id, username, email, created_at FROM Users', [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -135,6 +213,7 @@ app.get('/users', authenticateToken, (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 app.post('/users', async (req, res) => {
     const { username, password, email } = req.body;
     if (!username || !password || !email) {
@@ -218,6 +297,10 @@ app.get('/profile', authenticateToken, (req, res) => {
         res.json({ user });
     });
 });
+=======
+// User registration and login endpoints...
+// Include code for handling user registration, login, and updating user information here.
+>>>>>>> e70a3059663a21747598e6556db358a0e3fb120f
 
 const PORT = 3000;
 app.listen(PORT, () => {
