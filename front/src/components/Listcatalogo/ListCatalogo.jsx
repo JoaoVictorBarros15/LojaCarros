@@ -4,7 +4,7 @@ import './ListCatalogo.css';
 const url = 'http://localhost:3000/cars';
 
 const ListCatalogo = () => {
-    const [cars, setCars] = useState([]); // Garantir que cars seja um array
+    const [cars, setCars] = useState([]); // Estado local para veículos
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -44,14 +44,15 @@ const ListCatalogo = () => {
       };
   
       fetchCars();
-  }, []); // Array de dependências vazio, pois exampleCars é agora local ao useEffect
+  }, []);
+
     if (loading) return <p>Carregando Carros...</p>;
     if (error) return <p>Error: {error}</p>;
 
     return (
         <div className="catalogo-list-container">
             <h2>Catálogo de Carros</h2>
-            {Array.isArray(cars) && cars.length === 0 ? (
+            {cars.length === 0 ? (
                 <p>Nenhum carro encontrado</p>
             ) : (
                 <table className="catalogo-table">
@@ -64,31 +65,29 @@ const ListCatalogo = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.isArray(cars) &&
-                            cars.map((car) => (
-                                <tr key={car.id}>
-                                    <td>{car.modelo}</td>
-                                    <td>{car.ano}</td>
-                                    <td>R${car.preco}</td>
-                                    <td>
-                                        {car.image && (
-                                            <img
-                                                src={`http://localhost:3000/${car.image}`}
-                                                alt={`Imagem de ${car.modelo}`}
-                                                className="catalogo-image"
-                                            />
-                                        )}
-                                        {/* Para os carros de exemplo que já têm uma URL direta */}
-                                        {!car.image && car.imagem && (
-                                            <img
-                                                src={car.imagem}
-                                                alt={`Imagem de ${car.nome}`}
-                                                className="catalogo-image"
-                                            />
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
+                        {cars.map((car) => (
+                            <tr key={car.id}>
+                                <td>{car.modelo}</td>
+                                <td>{car.ano}</td>
+                                <td>R${car.preco}</td>
+                                <td>
+                                    {car.image && (
+                                        <img
+                                            src={`http://localhost:3000/${car.image}`}
+                                            alt={`Imagem de ${car.modelo}`}
+                                            className="catalogo-image"
+                                        />
+                                    )}
+                                    {!car.image && car.imagem && (
+                                        <img
+                                            src={car.imagem}
+                                            alt={`Imagem de ${car.modelo}`}
+                                            className="catalogo-image"
+                                        />
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             )}
