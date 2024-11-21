@@ -4,11 +4,12 @@ import './ListCarros.css';
 const url = 'http://localhost:3000/cars';
 
 const ListCarros = () => {
-    const [cars, setCars] = useState([]); // Garantir que cars seja um array
+    const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCarros, setSelectedCarros] = useState(null);
     const [formData, setFormData] = useState({ modelo: '', ano: '', preco: '', cor: '', image: '' });
+    const [isEditOpen, setIsEditOpen] = useState(false); // Novo estado para controlar a aba de edição
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -18,24 +19,22 @@ const ListCarros = () => {
                     throw new Error('Falha ao tentar ler os carros');
                 }
                 const data = await response.json();
-                console.log(data); // Verificando a estrutura dos dados
-                setCars(Array.isArray(data.cars) ? data.cars : []); // Verificando se 'data.cars' é um array
+                setCars(Array.isArray(data.cars) ? data.cars : []);
                 setLoading(false);
             } catch (err) {
                 setError(err.message);
                 setLoading(false);
             }
         };
-
         fetchCars();
     }, []);
 
     const deleteCarro = async (id) => {
+        const confirmDelete = window.confirm("Você deseja mesmo excluir?");
+        if (!confirmDelete) return;
+
         try {
-            console.log(`Deletando o carro com ID: ${id}`); // Verifique o ID
-            const response = await fetch(`${url}/${id}`, {
-                method: 'DELETE',
-            });
+            const response = await fetch(`${url}/${id}`, { method: 'DELETE' });
             if (!response.ok) {
                 throw new Error('Falha ao excluir o Carro');
             }
@@ -49,6 +48,7 @@ const ListCarros = () => {
     const handleEditClick = (car) => {
         setSelectedCarros(car);
         setFormData({ ...car });
+        setIsEditOpen(true); // Abre a aba de edição
     };
 
     const handleInputChange = (e) => {
@@ -63,20 +63,33 @@ const ListCarros = () => {
 
     const updateCarro = async () => {
         try {
+            const updateFormData = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                updateFormData.append(key, value);
+            });
+    
             const response = await fetch(`${url}/${selectedCarros.id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: updateFormData,
             });
+    
             if (!response.ok) {
                 throw new Error('Falha ao atualizar o carro');
             }
-            setCars(cars.map((car) => (car.id === selectedCarros.id ? formData : car)));
+    
+            const updatedCar = await response.json();
+            setCars(cars.map((car) => (car.id === selectedCarros.id ? updatedCar : car)));
             setSelectedCarros(null);
+            setIsEditOpen(false); // Fecha a aba de edição
+    
+            // Recarregar a página
+            window.location.reload();
         } catch (err) {
             setError(err.message);
         }
     };
+    
+
 
     if (loading) return <p>Carregando Carros...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -91,81 +104,83 @@ const ListCarros = () => {
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Marca</th>
                             <th>Ano</th>
                             <th>Preço</th>
                             <th>Cor</th>
                             <th>Imagem</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.isArray(cars) &&
-                            cars.map((car) => (
-                                <tr key={car.id}>
-                                    <td>{car.modelo}</td>
-                                    <td>{car.ano}</td>
-                                    <td>R${car.preco}</td>
-                                    <td>{car.cor}</td>
-                                    <td>
-                                        {car.image && (
-                                            <img
-                                                src={`http://localhost:3000/${car.image}`}
-                                                alt={`Imagem de ${car.modelo}`}
-                                                className="pet-image"
-                                            />
-                                        )}
-                                    </td>
-                                    <td className="button-group">
-                                        <button className="edit-button" onClick={() => handleEditClick(car)}>Editar</button>
-                                        <button className="delete-button" onClick={() => deleteCarro(car.id)}>Excluir</button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {cars.map((car) => (
+                            <tr key={car.id}>
+                                <td>{car.modelo}</td>
+                                <td>{car.ano}</td>
+                                <td>R${car.preco}</td>
+                                <td>{car.cor}</td>
+                                <td>
+                                    {car.image && (
+                                        <img
+                                            src={`http://localhost:3000/${car.image}`}
+                                            alt={`Imagem de ${car.modelo}`}
+                                            className="pet-image"
+                                        />
+                                    )}
+                                </td>
+                                <td
+                                className="button-group">
+                                    <button className="edit-button" onClick={() => handleEditClick(car)}>Editar</button>
+                                    <button className="delete-button" onClick={() => deleteCarro(car.id)}>Excluir</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             )}
 
-            {selectedCarros && (
-                <div className="edit-form">
-                    <h3>Editar carro</h3>
-                    <input
-                        type="text"
-                        name="modelo"
-                        value={formData.modelo}
-                        onChange={handleInputChange}
-                        placeholder="Modelo"
-                    />
-                    <input
-                        type="date"
-                        name="ano"
-                        value={formData.ano}
-                        onChange={handleInputChange}
-                        placeholder="Ano"
-                    />
-                    <input
-                        type="number"
-                        name="preco"
-                        value={formData.preco}
-                        onChange={handleInputChange}
-                        placeholder="Preço"
-                    />
-                    <input
-                        type="text"
-                        name="cor"
-                        value={formData.cor}
-                        onChange={handleInputChange}
-                        placeholder="Cor"
-                    />
-                    <input
-                        type="file"
-                        name="image"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                    />
-                    <div className="button-group">
-                        <button className="save-button" onClick={updateCarro}>Salvar</button>
-                        <button className="cancel-button" onClick={() => setSelectedCarros(null)}>Cancelar</button>
-                    </div>
+            {isEditOpen && (
+                <div className="edit-panel">
+                    <h3>Editar Carro</h3>
+                    <form>
+                        <input
+                            type="text"
+                            name="modelo"
+                            value={formData.modelo}
+                            onChange={handleInputChange}
+                            placeholder="Modelo"
+                        />
+                        <input
+                            type="number"
+                            name="ano"
+                            value={formData.ano}
+                            onChange={handleInputChange}
+                            placeholder="Ano"
+                        />
+                        <input
+                            type="number"
+                            name="preco"
+                            value={formData.preco}
+                            onChange={handleInputChange}
+                            placeholder="Preço"
+                        />
+                        <input
+                            type="text"
+                            name="cor"
+                            value={formData.cor}
+                            onChange={handleInputChange}
+                            placeholder="Cor"
+                        />
+                        <input
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                        />
+                        <div className="button-grou">
+                            <button type="button" className="save-button" onClick={updateCarro}>Salvar</button>
+                            <button type="button" className="cancel-button" onClick={() => setIsEditOpen(false)}>Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             )}
         </div>

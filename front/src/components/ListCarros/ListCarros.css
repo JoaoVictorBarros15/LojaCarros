@@ -101,3 +101,31 @@ input {
     object-fit: cover;
 }
 
+.edit-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.edit-panel h3 {
+    margin-bottom: 20px;
+}
+
+.edit-panel input,
+.edit-panel button {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.button-grou {
+    display: flex;
+    justify-content: space-between;
+}

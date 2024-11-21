@@ -94,49 +94,52 @@ app.post('/cars', upload.single('image'), (req, res) => {
 });
 
 // Endpoint para atualizar um carro existente
-app.put('/cars/:id', (req, res) => {
-    const { id } = req.params; // Extract ID from URL parameters
-    const { modelo, ano, cor, preco } = req.body; // Extract body data
+app.put('/cars/:id', upload.single('image'), (req, res) => {
+    const { id } = req.params;
+    const { modelo, ano, cor, preco } = req.body;
+    const imagePath = req.file ? req.file.path : null;
 
-    // Validate input
     if (!modelo || !ano || !cor || !preco) {
-        res.status(400).json({ message: 'All fields (modelo, ano, cor, preco) are required' });
-        return;
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
     }
 
-    db.run(
-        'UPDATE Carros SET modelo = ?, ano = ?, cor = ?, preco = ? WHERE id = ?',
-        [modelo, ano, cor, preco, id],
-        function (err) {
-            if (err) {
-                console.error(`Error updating car with ID ${id}:`, err);
-                res.status(400).json({ error: err.message });
-                return;
-            }
-            if (this.changes === 0) {
-                res.status(404).json({ message: 'Car not found' });
-                return;
-            }
-            res.json({ message: `Car updated with ID ${id}` });
-        }
-    );
-   // Endpoint para excluir um carro existente
-   app.delete('/cars/:id', (req, res) => {
-    const { id } = req.params;
-    const query = 'DELETE FROM Carros WHERE id = ?';
-    
-    db.run(query, [id], function(err) {
+    const query = imagePath
+        ? 'UPDATE Carros SET modelo = ?, ano = ?, cor = ?, preco = ?, image = ? WHERE id = ?'
+        : 'UPDATE Carros SET modelo = ?, ano = ?, cor = ?, preco = ? WHERE id = ?';
+
+    const params = imagePath
+        ? [modelo, ano, cor, preco, imagePath, id]
+        : [modelo, ano, cor, preco, id];
+
+    db.run(query, params, function (err) {
         if (err) {
+            console.error(err);
             return res.status(500).json({ error: err.message });
         }
         if (this.changes === 0) {
             return res.status(404).json({ message: 'Carro não encontrado' });
         }
-        res.status(200).json({ message: 'Carro deletado com sucesso' });
+        res.json({ message: `Carro atualizado com sucesso!` });
     });
 });
 
 
+   // Endpoint para excluir um carro existente
+   app.delete('/cars/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.run('DELETE FROM Carros WHERE id = ?', [id], function (err) {
+        if (err) {
+            console.error(`Erro ao excluir o carro com ID ${id}:`, err.message);
+            return res.status(500).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            console.warn(`Carro com ID ${id} não encontrado`);
+            return res.status(404).json({ message: 'Carro não encontrado' });
+        }
+        console.log(`Carro com ID ${id} excluído com sucesso`);
+        res.status(200).json({ message: 'Carro excluído com sucesso' });
+    });
 });
 
 // User endpoints with authentication

@@ -7,7 +7,7 @@ import ListCarros from './components/ListCarros/ListCarros';
 import ListCatalogo from './components/Listcatalogo/ListCatalogo';
 import Home from './components/Home/Home'; 
 import Login from './components/Login/Login';
-import Saiba from './components/Saiba/Saiba';
+import Saiba from './components/Saiba/Saiba';  // Certifique-se de importar o componente Saiba
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'; 
 
 function App() {
@@ -21,21 +21,19 @@ function App() {
 
   return (
     <BrowserRouter>
-         <div className='app-container'>
-        <Header onLogout={handleLogout} />
-        <main>
-        <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login onLogin={handleLogin} />} />
-            <Route path="/saiba-mais" element={<Saiba />} /> {/* Rota para a página Saiba */}
-            <Route
-              path='/form-car'
-              element={
-                <PrivateRoute>
-                  <FormCar />
-                </PrivateRoute>
-              }
-            />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              <Header onLogout={handleLogout} />
+              <main>
+                <Home />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
         <Route
           path="/form-users"
           element={
@@ -45,38 +43,72 @@ function App() {
           }
         />
         <Route
-              path='/form-users'
-              element={
-                <PrivateRoute>
-                  <FormUsers />
-                </PrivateRoute>
-              }
-            />
-         <Route
-              path='/list-carros'
-              element={
-                <PrivateRoute>
-                  <ListCarros />
-                </PrivateRoute>
-              }
-            />
+          path="/login"
+          element={
+            <div>
+              <Login onLogin={handleLogin} />
+            </div>
+          }
+        />
         <Route
-              path='/list-catalogo'
-              element={
-                <PrivateRoute>
+          path="/form-car"
+          element={
+            <PrivateRoute>
+              <div>
+                <Header onLogout={handleLogout} />
+                <main>
+                  <FormCar />
+                </main>
+                <Footer />
+              </div>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/list-carros"
+          element={
+            <PrivateRoute>
+              <div>
+                <Header onLogout={handleLogout} />
+                <main>
+                  <ListCarros />
+                </main>
+                <Footer />
+              </div>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/list-catalogo"
+          element={
+            <PrivateRoute>
+              <div>
+                <Header onLogout={handleLogout} />
+                <main>
                   <ListCatalogo />
-                </PrivateRoute>
-              }
-            />
-            
-            </Routes>
-        </main>
-        <Footer />
-      </div>
+                </main>
+                <Footer />
+              </div>
+            </PrivateRoute>
+          }
+        />
+        
+        {/* Nova rota para a página "Saiba Mais" */}
+        <Route
+          path="/saiba-mais"
+          element={
+            <div>
+              <Header onLogout={handleLogout} />
+              <main>
+                <Saiba />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }
-
-
 
 export default App;
