@@ -22,7 +22,7 @@ function Header({ onLogout }) {
                     <li><Link to="/form-car">Venda seu Carro</Link></li>
                     <li><Link to="/list-carros">Consulta Carros</Link></li>
                     <li><Link to="/list-catalogo">Veiculos Disponiveis</Link></li>
-                    <li><Link to="/saibamais">Saiba Mais</Link></li>
+                    <li><Link to="/saiba-mais">Saiba Mais</Link></li>
                     <li>
                         {token ? (
                             <button className="auth-btn" onClick={handleLogout}>Logout</button>

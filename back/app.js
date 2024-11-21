@@ -121,21 +121,22 @@ app.put('/cars/:id', (req, res) => {
         }
     );
    // Endpoint para excluir um carro existente
-app.delete('/cars/:id', (req, res) => {
-    const { id } = req.params; // Pega o ID do carro
-
-    // Lógica para deletar o carro com o id fornecido
-    db.run('DELETE FROM Carros WHERE id = ?', [id], function (err) {
+   app.delete('/cars/:id', (req, res) => {
+    const { id } = req.params;
+    const query = 'DELETE FROM Carros WHERE id = ?';
+    
+    db.run(query, [id], function(err) {
         if (err) {
-            console.error(`Erro ao excluir o carro com ID ${id}:`, err);
             return res.status(500).json({ error: err.message });
         }
         if (this.changes === 0) {
             return res.status(404).json({ message: 'Carro não encontrado' });
         }
-        res.status(200).send({ message: 'Carro excluído com sucesso' });
+        res.status(200).json({ message: 'Carro deletado com sucesso' });
     });
 });
+
+
 });
 
 // User endpoints with authentication

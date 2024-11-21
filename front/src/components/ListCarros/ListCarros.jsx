@@ -32,6 +32,7 @@ const ListCarros = () => {
 
     const deleteCarro = async (id) => {
         try {
+            console.log(`Deletando o carro com ID: ${id}`); // Verifique o ID
             const response = await fetch(`${url}/${id}`, {
                 method: 'DELETE',
             });
@@ -40,6 +41,7 @@ const ListCarros = () => {
             }
             setCars(cars.filter((car) => car.id !== id));
         } catch (err) {
+            console.error('Erro ao excluir carro:', err); // Mostra o erro no console
             setError(err.message);
         }
     };

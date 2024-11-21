@@ -1,0 +1,106 @@
+/* Estilos para o componente Saiba */
+.saiba-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-image: url('ram25.jpg'); /* Imagem de fundo impactante */
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Escurecimento com opacidade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.saiba-hero {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Altere para ocupar a altura completa */
+    display: flex;
+    flex-direction: column; /* Alinha os textos verticalmente */
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+}
+
+.saiba-title {
+    font-size: 4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px; /* Reduzi o espaçamento */
+    letter-spacing: 2px;
+    color: #f5f5f5;
+    z-index: 2;
+}
+
+.saiba-subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 40px;
+    color: #d1d1d1;
+    z-index: 2;
+}
+
+/* Seção de conteúdo */
+.saiba-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    padding: 20px;
+    color: #f5f5f5;
+}
+
+/* Estilos do texto */
+.saiba-info {
+    flex: 1;
+    padding: 20px;
+    z-index: 2;
+}
+
+.saiba-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #e8e8e8;
+}
+
+.saiba-info p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #cccccc;
+}
+
+/* Imagem */
+.saiba-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.saiba-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .saiba-content {
+        flex-direction: column;
+    }
+    .saiba-info {
+        text-align: center;
+    }
+    .saiba-image {
+        margin-top: 20px;
+    }
+}

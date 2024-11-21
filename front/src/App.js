@@ -6,7 +6,8 @@ import FormUsers from './components/FormUsers/FormUsers';
 import ListCarros from './components/ListCarros/ListCarros';
 import ListCatalogo from './components/Listcatalogo/ListCatalogo';
 import Home from './components/Home/Home'; 
-import Login from './components/Login/Login'; 
+import Login from './components/Login/Login';
+import Saiba from './components/Saiba/Saiba';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'; 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login onLogin={handleLogin} />} />
+            <Route path="/saiba-mais" element={<Saiba />} /> {/* Rota para a página Saiba */}
             <Route
               path='/form-car'
               element={

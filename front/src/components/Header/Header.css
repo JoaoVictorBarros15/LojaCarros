@@ -1,11 +1,12 @@
 /* Header.css */
 .header {
-  background-color: #1f1f1f; /* Cor escura, sofisticada */
-  padding: 1.5rem;
+  background-color: #1f1f1f;
+  padding: 0; /* Remover padding */
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Garante que o header ocupe toda a largura da tela */
 }
 
 .logo a {
