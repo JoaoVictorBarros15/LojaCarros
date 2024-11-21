@@ -1,68 +1,103 @@
 /* Estilos para o componente Home */
 .home-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background-image: url('ram.jpg'); /* Imagem de fundo impactante */
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .home-hero {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .home-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Toque de sofisticação com sobreposição escura */
-  }
-  
-  .home-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: #fff;
-  }
-  
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-image: url('ram.jpg'); /* Imagem de fundo impactante */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-hero {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Toque de sofisticação com sobreposição escura */
+}
+
+.home-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+}
+
+.home-title {
+  font-size: 4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.home-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.home-button {
+  font-size: 1.5rem; /* Aumente o tamanho da fonte */
+  padding: 15px 50px; /* Aumente o espaçamento interno (padding) */
+  background-color: #830909;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 200px; /* Largura mínima maior */
+}
+
+.home-button:hover {
+  background-color: #c2a35d; /* Efeito de hover marcante */
+}
+
+/* Responsividade para telas médias (max-width: 768px) */
+@media (max-width: 768px) {
   .home-title {
-    font-size: 4rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
+    font-size: 3rem; /* Reduz o tamanho da fonte para telas menores */
   }
-  
+
   .home-subtitle {
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin-bottom: 40px;
+    font-size: 1.2rem; /* Ajusta o tamanho da fonte do subtítulo */
+    margin-bottom: 30px; /* Menor espaço abaixo do subtítulo */
   }
-  
+
   .home-button {
-    font-size: 1.5rem; /* Aumente o tamanho da fonte */
-    padding: 15px 50px; /* Aumente o espaçamento interno (padding) */
-    background-color: #830909;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    min-width: 200px; /* Largura mínima maior */
+    font-size: 1.3rem; /* Ajusta o tamanho da fonte do botão */
+    padding: 12px 40px; /* Ajusta o padding do botão */
+    min-width: 180px; /* Largura mínima do botão */
   }
-  
-  
-  .home-button:hover {
-    background-color: #c2a35d; /* Efeito de hover marcante */
+}
+
+/* Responsividade para telas pequenas (max-width: 480px) */
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 2.5rem; /* Reduz ainda mais o tamanho da fonte */
+    margin-bottom: 15px;
   }
-  
+
+  .home-subtitle {
+    font-size: 1rem; /* Reduz o tamanho do subtítulo */
+    margin-bottom: 20px; /* Diminui o espaço abaixo do subtítulo */
+  }
+
+  .home-button {
+    font-size: 1.2rem; /* Ajusta o tamanho da fonte do botão */
+    padding: 10px 30px; /* Ajusta o padding do botão */
+    min-width: 160px; /* Ajusta a largura mínima do botão */
+  }
+}

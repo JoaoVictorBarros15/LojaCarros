@@ -74,8 +74,17 @@
   font-style: italic;
 }
 
-/* Ajustes para a responsividade */
+/* Responsividade para telas médias (max-width: 768px) */
 @media screen and (max-width: 768px) {
+  .catalogo-list-container {
+    padding: 40px 10px; /* Menos padding nas laterais para telas menores */
+  }
+
+  .catalogo-title {
+    font-size: 2.5rem; /* Título menor em telas médias */
+    margin-bottom: 30px; /* Menos margem abaixo do título */
+  }
+
   .catalogo-table {
     font-size: 1rem; /* Tamanho de fonte reduzido em telas menores */
   }
@@ -86,5 +95,39 @@
 
   .catalogo-image {
     width: 80px; /* Imagem menor em telas menores */
+  }
+
+  .catalogo-table .preco {
+    font-size: 1rem; /* Preço menor em telas menores */
+  }
+}
+
+/* Responsividade para telas pequenas (max-width: 480px) */
+@media screen and (max-width: 480px) {
+  .catalogo-list-container {
+    padding: 30px 10px; /* Reduz o padding nas telas muito pequenas */
+  }
+
+  .catalogo-title {
+    font-size: 2rem; /* Título ainda menor */
+    margin-bottom: 20px; /* Menos margem abaixo do título */
+  }
+
+  .catalogo-table th, .catalogo-table td {
+    padding: 8px 10px; /* Reduz o padding das células */
+    font-size: 0.9rem; /* Reduz o tamanho da fonte */
+  }
+
+  .catalogo-image {
+    width: 60px; /* Imagem ainda menor em telas pequenas */
+  }
+
+  .catalogo-table .preco {
+    font-size: 0.9rem; /* Preço também reduzido */
+  }
+
+  /* Ajuste no texto de "sem carros" */
+  .catalogo-list-container p {
+    font-size: 1.2rem; /* Texto de mensagem também reduzido */
   }
 }

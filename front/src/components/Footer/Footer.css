@@ -14,3 +14,39 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+
+/* Responsividade: telas menores */
+@media (max-width: 768px) {
+  footer {
+    padding: 0.8rem;  /* Reduzindo o padding em telas menores */
+  }
+
+  footer a {
+    margin: 0 0.5rem; /* Menos espaço entre os links */
+  }
+}
+
+/* Responsividade: telas muito pequenas, como em dispositivos móveis */
+@media (max-width: 480px) {
+  footer {
+    padding: 0.5rem;  /* Ainda menos padding */
+  }
+
+  footer a {
+    margin: 0 0.3rem; /* Espaçamento ainda menor entre os links */
+    font-size: 0.9rem;  /* Reduzindo o tamanho da fonte */
+  }
+
+  footer {
+    text-align: left; /* Alinhando os links à esquerda para telas muito pequenas */
+    padding-left: 1rem;  /* Adicionando espaço à esquerda */
+    padding-right: 1rem; /* Adicionando espaço à direita */
+  }
+}
+
+/* Responsividade: telas muito grandes */
+@media (min-width: 1200px) {
+  footer {
+    text-align: center;  /* Garantindo o alinhamento centralizado em telas maiores */
+  }
+}

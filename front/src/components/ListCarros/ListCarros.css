@@ -1,3 +1,4 @@
+/* Estilo geral da tabela */
 .pet-table {
     width: 100%;
     border-collapse: collapse;
@@ -28,11 +29,12 @@
     background-color: #f1f1f1;
 }
 
+/* Estilos dos botões */
 button {
     color: white;
     border: none;
     padding: 6px 10px;
-	margin-right: 5px;
+    margin-right: 5px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
@@ -55,20 +57,18 @@ button {
     background-color: #6c757d;
 }
 
-
+/* Estilo dos inputs */
 input {
     height: 40px;
     padding: 8px;
-    border: 1px solid #ccc; 
-    border-radius: 4px; 
-    font-size: 1rem; 
-    box-sizing: border-box; 
-	margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-right: 10px;
 }
 
-
-/* Para ajustar a largura das colunas ;) */
-
+/* Ajuste de largura das colunas */
 .pet-table th:nth-child(1), .pet-table td:nth-child(1) {
     width: 30%;
 }
@@ -101,6 +101,7 @@ input {
     object-fit: cover;
 }
 
+/* Painel de edição */
 .edit-panel {
     position: fixed;
     top: 0;
@@ -128,4 +129,74 @@ input {
 .button-grou {
     display: flex;
     justify-content: space-between;
+}
+
+/* Responsividade para telas médias (max-width: 768px) */
+@media (max-width: 768px) {
+    .pet-table th:nth-child(1), .pet-table td:nth-child(1) {
+        width: 40%; /* Aumenta a largura da primeira coluna */
+    }
+
+    .pet-table th:nth-child(2), .pet-table td:nth-child(2),
+    .pet-table th:nth-child(3), .pet-table td:nth-child(3),
+    .pet-table th:nth-child(4), .pet-table td:nth-child(4),
+    .pet-table th:nth-child(5), .pet-table td:nth-child(5) {
+        width: 10%; /* Mantém as colunas restantes com a mesma largura */
+    }
+
+    .pet-table th:nth-child(6), .pet-table td:nth-child(6) {
+        width: 20%; /* Diminui a largura da última coluna */
+    }
+
+    .pet-table th, .pet-table td {
+        padding: 8px; /* Ajuste no padding das células */
+    }
+
+    /* Ajustes no painel de edição */
+    .edit-panel {
+        width: 50%; /* Altera a largura do painel em telas médias */
+    }
+
+    button {
+        font-size: 0.8rem; /* Ajuste no tamanho da fonte dos botões */
+    }
+
+    input {
+        font-size: 0.9rem; /* Ajusta o tamanho da fonte dos inputs */
+    }
+}
+
+/* Responsividade para telas pequenas (max-width: 480px) */
+@media (max-width: 480px) {
+    .pet-table th, .pet-table td {
+        padding: 6px; /* Reduz o padding nas células para telas menores */
+    }
+
+    .pet-table th:nth-child(1), .pet-table td:nth-child(1) {
+        width: 50%; /* Reduz a largura da primeira coluna */
+    }
+
+    .pet-table th:nth-child(2), .pet-table td:nth-child(2),
+    .pet-table th:nth-child(3), .pet-table td:nth-child(3),
+    .pet-table th:nth-child(4), .pet-table td:nth-child(4),
+    .pet-table th:nth-child(5), .pet-table td:nth-child(5) {
+        width: 10%; /* Mantém a largura das colunas pequenas */
+    }
+
+    .pet-table th:nth-child(6), .pet-table td:nth-child(6) {
+        width: 20%; /* Ajusta a última coluna */
+    }
+
+    .edit-panel {
+        width: 100%; /* O painel ocupa 100% da largura da tela em dispositivos móveis */
+        position: static; /* Remove a posição fixa em telas pequenas */
+    }
+
+    button {
+        font-size: 0.7rem; /* Reduz o tamanho da fonte dos botões */
+    }
+
+    input {
+        font-size: 0.8rem; /* Ajuste da fonte dos inputs */
+    }
 }
